@@ -1,0 +1,567 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161d;
+    --surface2: #1a1e28;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.14);
+    --accent: #4f7cff;
+    --accent-dim: rgba(79,124,255,0.12);
+    --accent-hover: #6b93ff;
+    --text-primary: #f0f2f7;
+    --text-secondary: #7a8099;
+    --text-tertiary: #4a5068;
+    --success: #3ecf8e;
+    --success-dim: rgba(62,207,142,0.1);
+    --font-sans: 'Syne', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 3rem;
+  }
+
+  .header {
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .header-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(79,124,255,0.25);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+
+  .header p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-family: var(--font-sans);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .panel-full {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+  }
+
+  .panel-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .panel-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+  }
+
+  .panel-badge {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--surface2);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+
+  .panel-badge.ok {
+    background: var(--success-dim);
+    color: var(--success);
+    border-color: rgba(62,207,142,0.2);
+  }
+
+  textarea {
+    width: 100%;
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    resize: none;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    line-height: 1.7;
+    padding: 14px 16px;
+    min-height: 200px;
+  }
+
+  textarea::placeholder { color: var(--text-tertiary); }
+  textarea:focus { background: rgba(255,255,255,0.015); }
+
+  .output-textarea {
+    color: var(--accent);
+    min-height: 320px;
+    resize: vertical;
+  }
+
+  .color-section {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .mode-tabs {
+    display: flex;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 3px;
+    gap: 3px;
+  }
+
+  .mode-tab {
+    flex: 1;
+    padding: 6px 10px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 7px;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    transition: all 0.15s;
+  }
+
+  .mode-tab.active {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 1px 8px rgba(79,124,255,0.35);
+  }
+
+  .color-inputs { display: flex; flex-direction: column; gap: 8px; }
+
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .input-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    letter-spacing: 0.06em;
+    width: 18px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  input[type="text"], input[type="number"] {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 7px 10px;
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+
+  input[type="text"]:focus,
+  input[type="number"]:focus {
+    border-color: var(--accent);
+    background: var(--surface);
+  }
+
+  input[type="number"] {
+    width: 64px;
+    flex-shrink: 0;
+    text-align: center;
+  }
+
+  .swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+    transition: transform 0.1s;
+  }
+
+  .rgb-row { display: flex; gap: 6px; }
+  .rgb-field { display: flex; align-items: center; gap: 5px; flex: 1; }
+
+  .actions {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 11px 16px;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 2px 12px rgba(79,124,255,0.3);
+  }
+
+  .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(79,124,255,0.4); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-secondary {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+
+  .btn-secondary:hover { border-color: var(--border-hover); color: var(--text-primary); }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-tertiary);
+  }
+
+  .btn-ghost:hover { border-color: var(--border-hover); color: var(--text-secondary); }
+
+  .toast {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--surface2);
+    border: 1px solid var(--success-dim);
+    color: var(--success);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.2s;
+    pointer-events: none;
+    z-index: 100;
+    font-family: var(--font-sans);
+  }
+
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  .error-msg {
+    font-size: 11px;
+    color: #ff6b6b;
+    margin-top: 4px;
+    display: none;
+    font-family: var(--font-mono);
+  }
+
+  .error-msg.visible { display: block; }
+  .hidden { display: none !important; }
+
+  .char-count {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    color: var(--text-tertiary);
+  }
+</style>
+
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">SVG to Power Apps converter</h2>
+
+<div class="wrapper">
+  <div class="header">
+    <div class="header-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4f7cff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/>
+        <path d="M10 13l-1 2l1 2"/><path d="M14 13l1 2l-1 2"/><path d="M11.5 15.5l1 -1"/>
+      </svg>
+    </div>
+    <div>
+      <h1>SVG → Power Apps</h1>
+      <p>Cole um SVG do Tabler Icons e converta para a propriedade Image do Power Apps.</p>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-label">SVG Original</span>
+        <span class="char-count" id="char-count">0 chars</span>
+      </div>
+      <textarea id="svg-input" placeholder="<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; ...></svg>" spellcheck="false"></textarea>
+    </div>
+
+    <div class="panel" style="gap:0">
+      <div class="panel-header">
+        <span class="panel-label">Configuração de Cor</span>
+      </div>
+      <div class="color-section">
+        <div class="mode-tabs">
+          <button class="mode-tab active" id="tab-hex" onclick="setMode('hex')">HEX</button>
+          <button class="mode-tab" id="tab-rgb" onclick="setMode('rgb')">RGB</button>
+        </div>
+
+        <div id="hex-group" class="color-inputs">
+          <div class="input-row">
+            <span class="input-label">HEX</span>
+            <input type="text" id="hex-input" value="#FFFFFF" placeholder="#FFFFFF" oninput="updateSwatch()">
+            <div class="swatch" id="swatch" style="background:#FFFFFF"></div>
+          </div>
+          <div class="error-msg" id="hex-error">Formato inválido. Use #RRGGBB ou #RGB</div>
+        </div>
+
+        <div id="rgb-group" class="color-inputs hidden">
+          <div class="rgb-row">
+            <div class="rgb-field">
+              <span class="input-label">R</span>
+              <input type="number" id="r-input" min="0" max="255" value="255" oninput="updateSwatchRGB()">
+            </div>
+            <div class="rgb-field">
+              <span class="input-label">G</span>
+              <input type="number" id="g-input" min="0" max="255" value="255" oninput="updateSwatchRGB()">
+            </div>
+            <div class="rgb-field">
+              <span class="input-label">B</span>
+              <input type="number" id="b-input" min="0" max="255" value="255" oninput="updateSwatchRGB()">
+            </div>
+          </div>
+          <div class="error-msg" id="rgb-error">Valores R, G, B devem estar entre 0 e 255</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:2px">
+            <div class="swatch" id="swatch-rgb" style="background:rgb(255,255,255)"></div>
+            <span style="font-size:11px;font-family:var(--font-mono);color:var(--text-tertiary)" id="rgb-preview">rgb(255, 255, 255)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-primary" onclick="convert()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 12a8 8 0 0 1 8-8"/><path d="M20 12a8 8 0 0 1-8 8"/><polyline points="16 8 20 8 20 4"/><polyline points="8 16 4 16 4 20"/>
+      </svg>
+      Converter SVG
+    </button>
+    <button class="btn btn-secondary" onclick="copyResult()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+      </svg>
+      Copiar
+    </button>
+    <button class="btn btn-ghost" onclick="clearAll()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6m4-6v6"/>
+      </svg>
+      Limpar
+    </button>
+  </div>
+
+  <div class="panel-full">
+    <div class="panel-header">
+      <span class="panel-label">Código Power Apps</span>
+      <span class="panel-badge" id="output-badge">aguardando</span>
+    </div>
+    <textarea id="output" class="output-textarea" readonly placeholder="O resultado aparecerá aqui..." spellcheck="false"></textarea>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+  Copiado para a área de transferência
+</div>
+
+<script>
+  let mode = 'hex';
+
+  const svgInput = document.getElementById('svg-input');
+  const hexInput = document.getElementById('hex-input');
+  const rInput = document.getElementById('r-input');
+  const gInput = document.getElementById('g-input');
+  const bInput = document.getElementById('b-input');
+  const outputEl = document.getElementById('output');
+  const outputBadge = document.getElementById('output-badge');
+  const hexError = document.getElementById('hex-error');
+  const rgbError = document.getElementById('rgb-error');
+
+  svgInput.addEventListener('input', () => {
+    const len = svgInput.value.length;
+    document.getElementById('char-count').textContent = len > 0 ? len + ' chars' : '0 chars';
+  });
+
+  function setMode(m) {
+    mode = m;
+    document.getElementById('tab-hex').classList.toggle('active', m === 'hex');
+    document.getElementById('tab-rgb').classList.toggle('active', m === 'rgb');
+    document.getElementById('hex-group').classList.toggle('hidden', m !== 'hex');
+    document.getElementById('rgb-group').classList.toggle('hidden', m !== 'rgb');
+  }
+
+  function updateSwatch() {
+    const val = hexInput.value.trim();
+    if (/^#(?:[0-9a-fA-F]{3}){1,2}$/.test(val)) {
+      document.getElementById('swatch').style.background = val;
+      hexError.classList.remove('visible');
+    }
+  }
+
+  function updateSwatchRGB() {
+    const r = parseInt(rInput.value) || 0;
+    const g = parseInt(gInput.value) || 0;
+    const b = parseInt(bInput.value) || 0;
+    document.getElementById('swatch-rgb').style.background = `rgb(${r},${g},${b})`;
+    document.getElementById('rgb-preview').textContent = `rgb(${r}, ${g}, ${b})`;
+  }
+
+  function getColor() {
+    if (mode === 'hex') {
+      const val = hexInput.value.trim();
+      if (!/^#(?:[0-9a-fA-F]{3}){1,2}$/.test(val)) {
+        hexError.classList.add('visible');
+        return null;
+      }
+      hexError.classList.remove('visible');
+      return val;
+    } else {
+      const r = parseInt(rInput.value);
+      const g = parseInt(gInput.value);
+      const b = parseInt(bInput.value);
+      if ([r,g,b].some(v => isNaN(v) || v < 0 || v > 255)) {
+        rgbError.classList.add('visible');
+        return null;
+      }
+      rgbError.classList.remove('visible');
+      return `rgb(${r},${g},${b})`;
+    }
+  }
+
+  function transformSVG(svg, color) {
+    svg = svg.replace(/class='[^']*'/g, '').replace(/class="[^"]*"/g, '');
+    svg = svg.replace(/stroke="currentColor"/g, `stroke='${color}'`);
+    svg = svg.replace(/stroke='currentColor'/g, `stroke='${color}'`);
+    svg = svg.replace(/"/g, "'");
+    svg = svg.replace(/\s+>/g, '>');
+    return svg.trim();
+  }
+
+  function convert() {
+    const svg = svgInput.value.trim();
+    if (!svg) {
+      svgInput.focus();
+      svgInput.style.outline = '1px solid rgba(255,80,80,0.5)';
+      setTimeout(() => svgInput.style.outline = '', 1200);
+      return;
+    }
+    const color = getColor();
+    if (!color) return;
+
+    const finalSVG = transformSVG(svg, color);
+    outputEl.value = `"data:image/svg+xml;utf8," &\nEncodeUrl(\n"\n${finalSVG}\n"\n)`;
+    outputBadge.textContent = 'pronto';
+    outputBadge.classList.add('ok');
+  }
+
+  function copyResult() {
+    const result = outputEl.value;
+    if (!result) return;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(result).then(showToast);
+    } else {
+      outputEl.select();
+      document.execCommand('copy');
+      showToast();
+    }
+  }
+
+  function showToast() {
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  function clearAll() {
+    svgInput.value = '';
+    outputEl.value = '';
+    hexInput.value = '#FFFFFF';
+    rInput.value = '255'; gInput.value = '255'; bInput.value = '255';
+    document.getElementById('swatch').style.background = '#FFFFFF';
+    document.getElementById('swatch-rgb').style.background = 'rgb(255,255,255)';
+    document.getElementById('rgb-preview').textContent = 'rgb(255, 255, 255)';
+    document.getElementById('char-count').textContent = '0 chars';
+    outputBadge.textContent = 'aguardando';
+    outputBadge.classList.remove('ok');
+    hexError.classList.remove('visible');
+    rgbError.classList.remove('visible');
+    setMode('hex');
+  }
+</script>
