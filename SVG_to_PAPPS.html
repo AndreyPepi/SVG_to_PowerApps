@@ -506,11 +506,18 @@
   }
 
   function transformSVG(svg, color) {
+    // 1. Remove classes
     svg = svg.replace(/class='[^']*'/g, '').replace(/class="[^"]*"/g, '');
-    svg = svg.replace(/stroke="currentColor"/g, `stroke='${color}'`);
-    svg = svg.replace(/stroke='currentColor'/g, `stroke='${color}'`);
+    
+    // 2. A CORREÇÃO PRINCIPAL: Substitui currentColor (seja stroke ou fill) pela cor escolhida
+    svg = svg.replace(/currentColor/gi, color);
+    
+    // 3. Converte aspas duplas para simples para não quebrar a string no Power Apps
     svg = svg.replace(/"/g, "'");
+    
+    // 4. Limpa espaços sobrando nas tags
     svg = svg.replace(/\s+>/g, '>');
+    
     return svg.trim();
   }
 
@@ -526,6 +533,8 @@
     if (!color) return;
 
     const finalSVG = transformSVG(svg, color);
+    
+    // Monta o código final formatado para o Power Apps
     outputEl.value = `"data:image/svg+xml;utf8," &\nEncodeUrl(\n"\n${finalSVG}\n"\n)`;
     outputBadge.textContent = 'pronto';
     outputBadge.classList.add('ok');
